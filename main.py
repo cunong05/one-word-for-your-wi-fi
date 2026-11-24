@@ -20,6 +20,7 @@ def validate(word: str) -> None:
     assert len(word.split()) == 1, "entry must be exactly one token"
     assert 1 <= len(word) <= 30, "entry must be 1-30 characters"
     assert word.isalnum(), "entry must be a single alphanumeric token (no punctuation)"
+    word.encode("utf-8")  # must be valid UTF-8 text
 
 
 def main() -> None:
@@ -29,7 +30,11 @@ def main() -> None:
     out_path = os.path.join(out_dir, "entry.txt")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(ENTRY)
+    # Verify the write: read it back and confirm it matches exactly.
+    with open(out_path, "r", encoding="utf-8") as f:
+        assert f.read() == ENTRY, "written entry does not match ENTRY"
     print(ENTRY)
+    print(f"chars: {len(ENTRY)}")
 
 
 if __name__ == "__main__":
